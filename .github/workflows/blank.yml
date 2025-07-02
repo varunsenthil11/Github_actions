@@ -12,9 +12,7 @@ jobs:
   parse_and_assign:
     runs-on: ubuntu-latest
     steps:
-      - name: Show the original input string
-        run: echo "Input String: ${{ github.event.inputs.input_string }}"
-
+     
       - name: Parse the input string and export as environment variables
         id: parse
         env:
@@ -25,7 +23,7 @@ jobs:
           IFS=',' read -ra VALUES <<< "$INPUT_STRING"
 
           if [ "${#VALUES[@]}" -ne 20 ]; then
-            echo "❌ Error: Expected 20 answers, but got ${#VALUES[@]} values!"
+            echo "Error: Expected 20 answers, but got ${#VALUES[@]} values!"
             exit 1
           fi
 
@@ -37,7 +35,7 @@ jobs:
 
       - name: Print each parsed answer with question mapping
         run: |
-          echo "✅ Mapping of Questions to Answers:"
+          echo "Mapping of Questions to Answers:"
           echo "Question 1 Answer: $answer1"
           echo "Question 2 Answer: $answer2"
           echo "Question 3 Answer: $answer3"
