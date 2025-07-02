@@ -1,49 +1,60 @@
-name: String Parser with 20 Inputs
+name: String Parser and Assignment for 20 Questions
 
 on:
   workflow_dispatch:
     inputs:
       input_string:
-        description: 'Enter 20 comma-separated values'
+        description: 'Enter 20 comma-separated values (Answers for 20 questions)'
         required: true
-        default: 'val1,val2,val3,val4,val5,val6,val7,val8,val9,val10,val11,val12,val13,val14,val15,val16,val17,val18,val19,val20'
+        default: 'ans1,ans2,ans3,ans4,ans5,ans6,ans7,ans8,ans9,ans10,ans11,ans12,ans13,ans14,ans15,ans16,ans17,ans18,ans19,ans20'
 
 jobs:
-  parse_and_use_inputs:
+  parse_and_assign:
     runs-on: ubuntu-latest
     steps:
       - name: Show the original input string
         run: echo "Input String: ${{ github.event.inputs.input_string }}"
 
-      - name: Parse the string and export as environment variables
+      - name: Parse the input string and export as environment variables
         id: parse
+        env:
+          INPUT_STRING: ${{ github.event.inputs.input_string }}
         run: |
-          IFS=',' read -ra VALUES <<< "${{ github.event.inputs.input_string }}"
+          echo "Parsing input string into 20 answers..."
+
+          IFS=',' read -ra VALUES <<< "$INPUT_STRING"
+
+          if [ "${#VALUES[@]}" -ne 20 ]; then
+            echo "❌ Error: Expected 20 answers, but got ${#VALUES[@]} values!"
+            exit 1
+          fi
+
           for i in "${!VALUES[@]}"; do
             index=$((i + 1))
-            echo "value$index=${VALUES[i]}" >> $GITHUB_ENV
+            answer_var="answer$index"
+            echo "$answer_var=${VALUES[i]}" >> $GITHUB_ENV
           done
 
-      - name: Use parsed values
+      - name: Print each parsed answer with question mapping
         run: |
-          echo "Value 1: $value1"
-          echo "Value 2: $value2"
-          echo "Value 3: $value3"
-          echo "Value 4: $value4"
-          echo "Value 5: $value5"
-          echo "Value 6: $value6"
-          echo "Value 7: $value7"
-          echo "Value 8: $value8"
-          echo "Value 9: $value9"
-          echo "Value 10: $value10"
-          echo "Value 11: $value11"
-          echo "Value 12: $value12"
-          echo "Value 13: $value13"
-          echo "Value 14: $value14"
-          echo "Value 15: $value15"
-          echo "Value 16: $value16"
-          echo "Value 17: $value17"
-          echo "Value 18: $value18"
-          echo "Value 19: $value19"
-          echo "Value 20: $value20"
-
+          echo "✅ Mapping of Questions to Answers:"
+          echo "Question 1 Answer: $answer1"
+          echo "Question 2 Answer: $answer2"
+          echo "Question 3 Answer: $answer3"
+          echo "Question 4 Answer: $answer4"
+          echo "Question 5 Answer: $answer5"
+          echo "Question 6 Answer: $answer6"
+          echo "Question 7 Answer: $answer7"
+          echo "Question 8 Answer: $answer8"
+          echo "Question 9 Answer: $answer9"
+          echo "Question 10 Answer: $answer10"
+          echo "Question 11 Answer: $answer11"
+          echo "Question 12 Answer: $answer12"
+          echo "Question 13 Answer: $answer13"
+          echo "Question 14 Answer: $answer14"
+          echo "Question 15 Answer: $answer15"
+          echo "Question 16 Answer: $answer16"
+          echo "Question 17 Answer: $answer17"
+          echo "Question 18 Answer: $answer18"
+          echo "Question 19 Answer: $answer19"
+          echo "Question 20 Answer: $answer20"
